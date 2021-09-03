@@ -8,6 +8,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
+#include "spinner.h"
 
 Adafruit_7segment matrix = Adafruit_7segment();
 
@@ -17,15 +18,33 @@ void setup() {
   matrix.setBrightness(5);
 }
 
+uint32_t n = 0;
+
 void loop() {
-  matrix.blinkRate(HT16K33_BLINK_OFF);
-  for (uint16_t counter = 15; counter > 0; counter--) {
-    matrix.println(8800 + counter);
-    matrix.setBrightness(counter);
-  for (uint16_t counter = 0; counter <= 8; counter++) {
-    matrix.println(counter);
-    matrix.writeDigitRaw(0, 1 << counter);
-    matrix.writeDisplay();
-    delay(500);
+  for (uint16_t counter = 0x0; counter <= 0X50; counter++) {
+    matrix.clear();
+    matrix.printNumber(counter, HEX);
+    if (counter >= 0x20 && counter < 0x40) {
+      matrix.writeDigitRaw(0, SPINNER(spinner_circ, (n--)));
+      matrix.writeDisplay();
+      delay(66);
+      matrix.writeDigitRaw(0, SPINNER(spinner_circ, (n--)));
+      matrix.writeDisplay();
+      delay(66);
+      matrix.writeDigitRaw(0, SPINNER(spinner_circ, (n--)));
+      matrix.writeDisplay();
+      delay(66);
+    } else if (counter >= 0x40 && counter <= 0x50) {
+      matrix.writeDigitRaw(0, SPINNER(spinner_rrxing, (n++)));
+      matrix.writeDisplay();
+      delay(200);
+    } else {
+      matrix.writeDigitRaw(0, SPINNER(spinner_circ, (n++)));
+      matrix.writeDisplay();
+      delay(100);
+      matrix.writeDigitRaw(0, SPINNER(spinner_circ, (n++)));
+      matrix.writeDisplay();
+      delay(100);
+    }
   }
 }
