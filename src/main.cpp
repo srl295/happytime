@@ -5,17 +5,37 @@
  */
 
 #include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include "Adafruit_LEDBackpack.h"
+
+Adafruit_7segment matrix = Adafruit_7segment();
 
 void setup() {
-  // put your setup code here, to run once:
   pinMode(LED_BUILTIN, OUTPUT);
+  matrix.begin(0x70);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(1000);
-
+  matrix.blinkRate(HT16K33_BLINK_OFF);
+  for (uint16_t counter = 15; counter > 0; counter--) {
+    matrix.println(8800 + counter);
+    matrix.setBrightness(counter);
+    matrix.writeDisplay();
+    delay(100);
+  }
+  matrix.blinkRate(HT16K33_BLINK_HALFHZ);
+  for (uint16_t counter = 0; counter <= 15; counter++) {
+    matrix.println(8800 + counter);
+    matrix.setBrightness(counter);
+    matrix.writeDisplay();
+    delay(100);
+  }
+  matrix.blinkRate(HT16K33_BLINK_1HZ);
+  for (uint16_t counter = 0; counter <= 15; counter++) {
+    matrix.println(8800 + counter);
+    matrix.setBrightness(counter);
+    matrix.writeDisplay();
+    delay(100);
+  }
 }
