@@ -1,3 +1,9 @@
+/**
+ * Happy Clock.
+ * ©2021 Steven R. Loomis
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include <Arduino.h>
 
 void setup() {
