@@ -16,6 +16,7 @@ void setup()
 {
   matrix.begin(0x70);
   matrix.setBrightness(5);
+  pinMode(DD7, OUTPUT);
 }
 
 uint32_t n = 0;
@@ -50,13 +51,22 @@ void printTime(int ss)
 
 void loop()
 {
-  int countdown = 2 * 60; // 2 minutes
+  int countdown = 1; // 2 minutes
   for (int16_t counter = countdown; counter >= 0; counter--)
   {
     printTime(counter);
     matrix.writeDisplay();
     delay(1000);
   }
+
+  for (int16_t i=0; i<100;i++) {
+    digitalWrite(DD7, LOW);
+    delay(5);
+    digitalWrite(DD7, HIGH);
+    delay(5);
+  }
+
+
 
   // Done.
   matrix.setBrightness(0);
