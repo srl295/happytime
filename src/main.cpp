@@ -9,6 +9,9 @@
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
 #include "spinner.h"
+#include <Tone.h>
+
+Tone spkr;
 
 Adafruit_7segment matrix = Adafruit_7segment();
 
@@ -16,7 +19,7 @@ void setup()
 {
   matrix.begin(0x70);
   matrix.setBrightness(5);
-  pinMode(DD7, OUTPUT);
+  spkr.begin(DD7);
 }
 
 uint32_t n = 0;
@@ -49,9 +52,17 @@ void printTime(int ss)
   printTime2(m, s);
 }
 
+void myplay(uint16_t f, uint32_t d) {
+  while(spkr.isPlaying()) {
+    delay(5);
+  }
+  delay(100);
+  spkr.play(f, d);
+}
+
 void loop()
 {
-  int countdown = 1; // 2 minutes
+  int countdown =  2*60; // 2 minutes
   for (int16_t counter = countdown; counter >= 0; counter--)
   {
     printTime(counter);
@@ -59,12 +70,21 @@ void loop()
     delay(1000);
   }
 
-  for (int16_t i=0; i<100;i++) {
-    digitalWrite(DD7, LOW);
-    delay(5);
-    digitalWrite(DD7, HIGH);
-    delay(5);
-  }
+  #define D_Q 200
+
+  // for (int16_t i=0; i<100;i++) {
+    myplay(NOTE_C5, D_Q);
+    myplay(NOTE_C5, D_Q);
+    myplay(NOTE_C5, D_Q);
+    myplay(NOTE_G4, D_Q);
+    myplay(NOTE_A4, D_Q);
+    myplay(NOTE_B4, D_Q);
+    myplay(NOTE_C5, D_Q);
+    myplay(NOTE_B4, D_Q);
+    myplay(NOTE_A4, D_Q);
+    myplay(NOTE_G4, D_Q);
+  // }
+  // spkr.stop();
 
 
 
