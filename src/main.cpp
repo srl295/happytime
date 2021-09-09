@@ -20,6 +20,11 @@ void setup()
   matrix.begin(0x70);
   matrix.setBrightness(5);
   spkr.begin(DD7);
+
+  pinMode(DD3, INPUT_PULLUP);
+  pinMode(DD4, INPUT_PULLUP);
+  pinMode(DD5, INPUT_PULLUP);
+  pinMode(DD6, INPUT_PULLUP);
 }
 
 uint32_t n = 0;
@@ -62,7 +67,33 @@ void myplay(uint16_t f, uint32_t d) {
 
 void loop()
 {
-  int countdown =  2*60; // 2 minutes
+  int16_t countdown =  0; // 2 minutes
+  matrix.blinkRate(HT16K33_BLINK_2HZ);
+  int go = 0;
+
+  while (go == 0) {
+    printTime(countdown);
+    matrix.writeDisplay();
+    // delay(20);
+
+    if (digitalRead(DD3) == LOW) {
+      go = 1;
+    } else if (digitalRead(DD4) == LOW) {
+      countdown += 1; // second
+      delay(200);
+    } else if (digitalRead(DD5) == LOW) {
+      countdown += 60; // minute
+      delay(200);
+    } else if (digitalRead(DD6) == LOW ) {
+      countdown = 0;
+      delay(200);
+    } else {
+      delay(20);
+    }
+  }
+
+  // Off and running
+  matrix.blinkRate(HT16K33_BLINK_OFF);
   for (int16_t counter = countdown; counter >= 0; counter--)
   {
     printTime(counter);
