@@ -19,15 +19,17 @@ void setup()
 {
   matrix.begin(0x70);
   matrix.setBrightness(5);
-  spkr.begin(DD7);
+  spkr.begin(7);
 
-  pinMode(DD3, INPUT_PULLUP);
-  pinMode(DD4, INPUT_PULLUP);
-  pinMode(DD5, INPUT_PULLUP);
-  pinMode(DD6, INPUT_PULLUP);
+  pinMode(3, INPUT_PULLUP); // GO
+  pinMode(4, INPUT_PULLUP); // S
+  pinMode(5, INPUT_PULLUP); // M
+  // pinMode(6, INPUT_PULLUP);
+
+  // digitalWrite(DD8, LOW);
 }
 
-uint32_t n = 0;
+uint32_t n = 0; // spinner counter
 
 void printTime2(int m, int s)
 {
@@ -57,37 +59,59 @@ void printTime(int ss)
   printTime2(m, s);
 }
 
-void myplay(uint16_t f, uint32_t d) {
-  while(spkr.isPlaying()) {
+void myplay(uint16_t f, uint32_t d)
+{
+  while (spkr.isPlaying())
+  {
+    matrix.clear();
+    for(int qq = 0; qq<=4; qq++)
+      matrix.writeDigitRaw(qq, SPINNER(spinner_circ, (n++)));
+    matrix.writeDisplay();
     delay(5);
   }
+  matrix.clear();
+  for(int qq = 0; qq<=4; qq++)
+    matrix.writeDigitRaw(qq, SPINNER(spinner_circ, (n++)));
+  matrix.writeDisplay();
   delay(100);
   spkr.play(f, d);
 }
 
 void loop()
 {
-  int16_t countdown =  0; // 2 minutes
-  matrix.blinkRate(HT16K33_BLINK_2HZ);
+  int16_t countdown = 0; // 0 minutes
+  // matrix.blinkRate(HT16K33_BLINK_2HZ);
+  matrix.clear();
+  matrix.setBrightness(0);             // dimmest
+  matrix.blinkRate(HT16K33_BLINK_OFF); // no blink
+
   int go = 0;
 
-  while (go == 0) {
+  while (go == 0)
+  {
     printTime(countdown);
     matrix.writeDisplay();
     // delay(20);
 
-    if (digitalRead(DD3) == LOW) {
+    if (digitalRead(3) == LOW)
+    {
       go = 1;
-    } else if (digitalRead(DD4) == LOW) {
+    }
+    else if (digitalRead(4) == LOW)
+    {
       countdown += 1; // second
       delay(200);
-    } else if (digitalRead(DD5) == LOW) {
+    }
+    else if (digitalRead(5) == LOW)
+    {
       countdown += 60; // minute
       delay(200);
-    } else if (digitalRead(DD6) == LOW ) {
-      countdown = 0;
-      delay(200);
-    } else {
+      // } else if (digitalRead(6) == LOW ) {
+      //   countdown = 0;
+      //   delay(200);
+    }
+    else
+    {
       delay(20);
     }
   }
@@ -101,39 +125,52 @@ void loop()
     delay(1000);
   }
 
-  #define D_Q 200
+#define D_Q 200       // qtr
+#define D_H (D_Q * 2) // half
 
   // for (int16_t i=0; i<100;i++) {
-    myplay(NOTE_C5, D_Q);
-    myplay(NOTE_C5, D_Q);
-    myplay(NOTE_C5, D_Q);
-    myplay(NOTE_G4, D_Q);
-    myplay(NOTE_A4, D_Q);
-    myplay(NOTE_B4, D_Q);
-    myplay(NOTE_C5, D_Q);
-    myplay(NOTE_B4, D_Q);
-    myplay(NOTE_A4, D_Q);
-    myplay(NOTE_G4, D_Q);
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_G4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_B4, D_Q);
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_B4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_G4, D_H);
   // }
   // spkr.stop();
 
-
-
   // Done.
   matrix.setBrightness(0);
-  int p = 0;
-  int j = 0;
-  for (;;)
-  {
-    j++;
-    matrix.clear();
-    matrix.writeDigitRaw(p, SPINNER(spinner_circ, (n++)));
-    matrix.writeDisplay();
-    delay(66);
-    if ((j % 127) == 0) {
-      p++;
-      if(p == 2) p++;
-      if(p == 5) p = 0;
-    }
-  }
+  // int p = 0;
+  // int j = 0;
+  // for (;;)
+  // {
+  //   j++;
+  //   matrix.clear();
+  //   matrix.writeDigitRaw(p, SPINNER(spinner_circ, (n++)));
+  //   matrix.writeDisplay();
+  //   delay(66);
+  //   if ((j % 127) == 0)
+  //   {
+  //     p++;
+  //     if (p == 2)
+  //       p++;
+  //     if (p == 5)
+  //       p = 0;
+  //   }
+  // }
+
+  // // Done - sleep
+  // matrix.clear();
+  // matrix.write('0');
+  // matrix.write('0');
+  // matrix.write(':');
+  // matrix.write('0');
+  // matrix.write('0');
+  // matrix.writeDisplay();
+  // delay(2000);
+  // delay(1000 * 60 * 5); // go back and get another number after 5 min
 }
