@@ -125,22 +125,94 @@ void loop()
     delay(1000);
   }
 
-#define D_Q 200       // qtr
-#define D_H (D_Q * 2) // half
+#define D_E (D_Q / 2) // 1/8
+#define D_Q 200       // 1/4
+#define D_H (D_Q * 2) // 1/2
+#define D_HD (D_Q * 3) // dotted 1/2
 
   // for (int16_t i=0; i<100;i++) {
   myplay(NOTE_C5, D_Q);
   myplay(NOTE_C5, D_Q);
   myplay(NOTE_C5, D_Q);
+  myplay(NOTE_G4, D_E);
+  myplay(NOTE_A4, D_E);
+  myplay(NOTE_B4, D_Q);
+  myplay(NOTE_C5, D_E);
+  myplay(NOTE_B4, D_E);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_G4, D_Q);
+
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_B4, D_Q);
+  myplay(NOTE_A4, D_Q);
   myplay(NOTE_G4, D_Q);
   myplay(NOTE_A4, D_Q);
+  myplay(NOTE_F4, D_E);
+  myplay(NOTE_E4, D_E);
+  myplay(NOTE_D4, D_Q);
+  myplay(NOTE_C4, D_Q);
+
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_G4, D_E);
+  myplay(NOTE_A4, D_E);
+  myplay(NOTE_B4, D_Q);
+  myplay(NOTE_C5, D_E);
+  myplay(NOTE_B4, D_E);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_G4, D_Q);
+
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_B4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_G4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_F4, D_E);
+  myplay(NOTE_E4, D_E);
+  myplay(NOTE_D4, D_Q);
+  myplay(NOTE_C4, D_Q);
+
+  myplay(NOTE_C4, D_Q);
+  myplay(NOTE_G4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_G4, D_Q);
+  myplay(NOTE_FS4, D_Q);
+  myplay(NOTE_G4, D_HD);
+
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_G4, D_Q);
+  myplay(NOTE_G4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_B4, D_Q);
+  myplay(NOTE_C5, D_HD);
+
   myplay(NOTE_B4, D_Q);
   myplay(NOTE_C5, D_Q);
   myplay(NOTE_B4, D_Q);
   myplay(NOTE_A4, D_Q);
-  myplay(NOTE_G4, D_H);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_G4, D_HD);
+
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_G4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_F4, D_Q);
+  myplay(NOTE_E4, D_HD);
+
+  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_B4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_G4, D_Q);
+  myplay(NOTE_A4, D_Q);
+  myplay(NOTE_F4, D_E);
+  myplay(NOTE_E4, D_E);
+  myplay(NOTE_D4, D_Q);
+  myplay(NOTE_C4, D_HD);
+
   // }
-  // spkr.stop();
+  spkr.stop();
 
   // Done.
   matrix.setBrightness(0);
