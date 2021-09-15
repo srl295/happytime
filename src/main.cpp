@@ -116,6 +116,13 @@ void loop()
     }
   }
 
+  while (digitalRead(3) == LOW) {
+    delay(20);
+    matrix.clear();
+    matrix.writeDigitRaw(1, SPINNER(spinner_rrxing, (n++)));
+    matrix.writeDisplay();
+  }
+
   // Off and running
   matrix.blinkRate(HT16K33_BLINK_OFF);
   for (int16_t counter = countdown; counter >= 0; counter--)
@@ -123,6 +130,26 @@ void loop()
     printTime(counter);
     matrix.writeDisplay();
     delay(1000);
+
+    if (digitalRead(3) == LOW) {
+      matrix.blinkRate(HT16K33_BLINK_2HZ);
+      while (digitalRead(3) == LOW) {
+        delay(20);
+      }
+      matrix.blinkRate(HT16K33_BLINK_1HZ);
+      delay(100);
+
+      // pause 
+      while (digitalRead(3) == HIGH) {
+        delay(20);
+      }
+      // unpause
+      matrix.blinkRate(HT16K33_BLINK_2HZ);
+      while (digitalRead(3) == LOW) {
+        delay(20);
+      }
+      matrix.blinkRate(HT16K33_BLINK_OFF);
+    }
   }
 
 #define D_E (D_Q / 2) // 1/8
@@ -211,6 +238,9 @@ void loop()
   myplay(NOTE_D4, D_Q);
   myplay(NOTE_C4, D_HD);
 
+  delay(D_HD);
+  delay(D_HD);
+  delay(D_HD);
   // }
   spkr.stop();
 
