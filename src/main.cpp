@@ -15,10 +15,12 @@ Tone spkr;
 
 Adafruit_7segment matrix = Adafruit_7segment();
 
+int brightness = 0;
+
 void setup()
 {
   matrix.begin(0x70);
-  matrix.setBrightness(5);
+  matrix.setBrightness(brightness);
   spkr.begin(7);
 
   pinMode(3, INPUT_PULLUP); // GO
@@ -82,7 +84,7 @@ void loop()
   int16_t countdown = 0; // 0 minutes
   // matrix.blinkRate(HT16K33_BLINK_2HZ);
   matrix.clear();
-  matrix.setBrightness(0);             // dimmest
+  matrix.setBrightness(brightness);             // dimmest
   matrix.blinkRate(HT16K33_BLINK_OFF); // no blink
 
   int go = 0;
@@ -115,12 +117,20 @@ void loop()
       delay(20);
     }
   }
-
+  n = 0;
   while (digitalRead(3) == LOW) {
-    delay(20);
+    delay(200);
     matrix.clear();
-    matrix.writeDigitRaw(1, SPINNER(spinner_rrxing, (n++)));
+    if (n > 10) {
+      matrix.writeDigitRaw(1, SPINNER(spinner_down, (n++)));
+    } else {
+      matrix.writeDigitRaw(1, SPINNER(spinner_rrxing, (n++)));
+    }
     matrix.writeDisplay();
+  }
+  if (n > 10) {
+    // reset
+    return;
   }
 
   // Off and running
@@ -132,23 +142,64 @@ void loop()
     delay(1000);
 
     if (digitalRead(3) == LOW) {
-      matrix.blinkRate(HT16K33_BLINK_2HZ);
+       n = 0;
+      // pause
+      matrix.clear();
+      matrix.blinkRate(HT16K33_BLINK_OFF);
       while (digitalRead(3) == LOW) {
-        delay(20);
+        if (n > 20) {
+          matrix.writeDigitRaw(1, SPINNER(spinner_down, (n++)));
+        } else {
+          matrix.writeDigitRaw(1, SPINNER(spinner_rrxing, (n++)));
+        }
+        matrix.writeDisplay();
+        delay(200);
       }
+      if (n > 20) return;
+      printTime(counter);
       matrix.blinkRate(HT16K33_BLINK_1HZ);
+      matrix.writeDisplay();
       delay(100);
-
-      // pause 
       while (digitalRead(3) == HIGH) {
+        // paused
         delay(20);
+        // TODO: brightness up/down?
+        if (digitalRead(4) == LOW)
+        {
+          brightness = (brightness + 1) & 0x0F; // second
+          matrix.setBrightness(brightness);
+          matrix.writeDisplay();
+          delay(200);
+        } else if (digitalRead(5) == LOW) {
+          brightness = (brightness - 1) & 0x0F; // second
+          matrix.setBrightness(brightness);
+          matrix.writeDisplay();
+          delay(200);
+        }
       }
+
       // unpause
       matrix.blinkRate(HT16K33_BLINK_2HZ);
-      while (digitalRead(3) == LOW) {
-        delay(20);
-      }
+      n = 0;
+      // pause
+      matrix.clear();
       matrix.blinkRate(HT16K33_BLINK_OFF);
+      while (digitalRead(3) == HIGH) {
+        if (n > 20) {
+          // Exit!
+          matrix.writeDigitRaw(1, SPINNER(spinner_down, (n++)));
+        } else {
+          matrix.writeDigitRaw(1, SPINNER(spinner_rrxing, (n++)));
+        }
+        matrix.writeDisplay();
+        delay(200);
+      }
+      if (n > 20) return; // Exit
+
+      matrix.blinkRate(HT16K33_BLINK_OFF);
+      printTime(counter);
+      matrix.writeDisplay();
+      delay(1000);
     }
   }
 
@@ -245,7 +296,7 @@ void loop()
   spkr.stop();
 
   // Done.
-  matrix.setBrightness(0);
+  matrix.setBrightness(brightness);             // dimmest
   // int p = 0;
   // int j = 0;
   // for (;;)
