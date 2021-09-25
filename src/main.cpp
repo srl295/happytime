@@ -258,7 +258,7 @@ void loop()
   myplay(NOTE_FS4, D_Q);
   myplay(NOTE_G4, D_HD);
 
-  myplay(NOTE_C5, D_Q);
+  myplay(NOTE_C4, D_Q);
   myplay(NOTE_G4, D_Q);
   myplay(NOTE_G4, D_Q);
   myplay(NOTE_A4, D_Q);
