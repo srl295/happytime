@@ -186,6 +186,23 @@ void myplay(uint16_t f, uint32_t d)
   spkr.play(f, d);
   #endif
 }
+// void myplay(uint16_t f, uint32_t d)
+// {
+//   while (spkr.isPlaying())
+//   {
+//     matrix.clear();
+//     for(int qq = 0; qq<=4; qq++)
+//       matrix.writeDigitRaw(qq, SPINNER(spinner_circ, (n++)));
+//     matrix.writeDisplay();
+//     delay(5);
+//   }
+//   matrix.clear();
+//   for(int qq = 0; qq<=4; qq++)
+//     matrix.writeDigitRaw(qq, SPINNER(spinner_circ, (n++)));
+//   matrix.writeDisplay();
+//   delay(100);
+//   spkr.play(f, d);
+// }
 
 void myplay3(uint16_t f, uint16_t f1, uint16_t f2, uint32_t d)
 {
