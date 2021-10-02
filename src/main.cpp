@@ -11,6 +11,14 @@
 #include "spinner.h"
 #include <Tone.h>
 
+
+#define D_E (D_Q / 2) // 1/8
+#define D_Q 200       // 1/4
+#define D_H (D_Q * 2) // 1/2
+#define D_HD (D_Q * 3) // dotted 1/2
+
+
+
 Tone spkr;
 
 Adafruit_7segment matrix = Adafruit_7segment();
@@ -89,6 +97,8 @@ void loop()
 
   int go = 0;
 
+  int timeout = 15000; // 5 minutes before timeout
+
   while (go == 0)
   {
     printTime(countdown);
@@ -115,6 +125,31 @@ void loop()
     else
     {
       delay(20);
+      timeout--;
+    }
+
+    if ( timeout <= 0 ) {
+      myplay(NOTE_D2, D_Q);
+      myplay(NOTE_E1, D_Q);
+      myplay(NOTE_D2, D_Q);
+      myplay(NOTE_E1, D_Q);
+      delay(1000);
+      myplay(NOTE_D2, D_Q);
+      myplay(NOTE_E1, D_Q);
+      myplay(NOTE_D2, D_Q);
+      myplay(NOTE_E1, D_Q);
+      delay(1000);
+      spkr.stop();
+      matrix.setBrightness(0);
+      matrix.clear();
+      matrix.blinkRate(HT16K33_BLINK_HALFHZ);
+      matrix.writeDigitRaw(2, 0xFFFFFFFF);
+      matrix.writeDisplay();
+      // matrix.blinkRate(HT16K33_BLINK_OFF);
+      // matrix.writeColon();
+
+      for(;;)
+        ; // endless loop
     }
   }
   n = 0;
@@ -202,11 +237,6 @@ void loop()
       delay(1000);
     }
   }
-
-#define D_E (D_Q / 2) // 1/8
-#define D_Q 200       // 1/4
-#define D_H (D_Q * 2) // 1/2
-#define D_HD (D_Q * 3) // dotted 1/2
 
   // for (int16_t i=0; i<100;i++) {
   myplay(NOTE_C5, D_Q);
